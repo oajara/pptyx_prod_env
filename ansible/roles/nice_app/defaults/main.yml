@@ -1,0 +1,13 @@
+---
+# db info
+database_name: employees
+database_user: employees_user
+database_pass: nice_secret
+database_host: 10.100.199.202
+
+# app info
+deploy_path: /var/www/nice_app
+server_name: pptyx
+repo_url: https://github.com/oajara/pptyx_nice_app.git
+
+

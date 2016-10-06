@@ -1,0 +1,43 @@
+---
+- name: MySQL is installed
+  apt: pkg=mysql-server state=installed update_cache=false
+#  apt: pkg=mysql-server state=installed update_cache=true  
+  
+- name: Python MySQL is installed
+  apt: pkg=python-mysqldb state=installed
+
+- name: Update MySQL root password for all root accounts 
+  mysql_user:
+    name: root
+    host: "{{ item }}"
+    password: "{{ mysql_root_pass }}"
+    state: present
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+  # this task will fail after first run because the password will be already updated
+  ignore_errors: yes  
+    
+- name: Remove the test database
+  mysql_db:
+    name: test
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_pass }}"
+  notify:
+    - Restart MySQL     
+    
+- name: Copy the templates to their respestive destination
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root 
+    group: root 
+    mode: "{{ item.mode | default(644) }}"
+  with_items:
+    - { src: 'my.cnf.j2', dest: '/etc/mysql/my.cnf' }
+    - { src: 'root.cnf.j2', dest: '~/.my.cnf', mode: '600' }    
+  notify:
+    - Restart MySQL    

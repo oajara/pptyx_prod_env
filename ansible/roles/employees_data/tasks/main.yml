@@ -1,0 +1,17 @@
+---
+- name: Git is present
+  apt: pkg=git state=installed
+    
+- name: Clone DB repo
+  git: repo={{ db_repo_url }} dest=/tmp/data force=yes
+
+- name: Load employees database
+  shell: mysql < employees.sql
+  args:
+    chdir: /tmp/data
+    
+- name: Create MySQL user for app
+  mysql_user: name={{ database_user }} password={{ database_pass }} priv=employees.*:ALL state=present host={{ allowed_ip }}
+    
+  
+

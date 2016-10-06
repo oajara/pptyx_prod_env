@@ -1,0 +1,40 @@
+---
+
+- name: Setup Virtual Host
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}" 
+  with_items:
+    - { src: 'virtualhost.conf.j2', dest: '/etc/nginx/sites-available/{{ server_name }}' }
+
+- name: Enable Virtual Host
+  file:
+    src: "{{ item.src | default(omit) }}"
+    dest: "{{ item.dest }}"
+    state: "{{ item.state }}"
+  with_items:
+    - { src: '/etc/nginx/sites-available/{{ server_name }}', dest: '/etc/nginx/sites-enabled/{{ server_name }}', state: 'link' }
+  notify:
+    - Restart Nginx   
+    
+    
+- name: Create deploy directory
+  file: dest={{ deploy_path }} state=directory owner=www-data group=www-data mode=0700
+
+- name: Deploy code
+  git: repo={{ repo_url }} dest={{ deploy_path }} force=yes
+
+- name: Set www-data as owner of the deploy path directory
+  file: dest={{ deploy_path }} state=directory owner=www-data group=www-data recurse=yes
+  
+- name: Copy DB Config
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}" 
+  with_items:
+    - { src: 'db.ini.j2', dest: '{{ deploy_path }}/config/db.ini' }  
+

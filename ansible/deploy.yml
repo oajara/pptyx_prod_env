@@ -1,0 +1,17 @@
+- hosts: dbservers
+  remote_user: vagrant
+  become: true
+  become_user: root
+  roles:
+    - db
+    - employees_data
+
+- hosts: webservers
+  remote_user: vagrant
+  become: true
+  become_user: root
+  roles:
+    - web
+    - nice_app
+    
+

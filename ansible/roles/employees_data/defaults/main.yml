@@ -1,0 +1,8 @@
+---
+# db info
+database_user: employees_user
+database_pass: nice_secret
+allowed_ip: 10.100.199.201
+db_repo_url: https://github.com/datacharmer/test_db.git
+
+

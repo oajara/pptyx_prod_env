@@ -1,0 +1,7 @@
+---
+server_name: pptyx 
+connections: 1024
+
+ubuntu_php_pkgs:
+  - php5-fpm
+  - php5-mysql
