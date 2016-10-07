@@ -3,7 +3,7 @@
   apt: pkg=nginx state=installed update_cache=false
 #  apt: pkg=mysql-server state=installed update_cache=true  
 
-- name: Git
+- name: Git is installed
   apt: pkg=git state=installed
   
 - name: Install PHP5-FPM
@@ -14,7 +14,7 @@
     update_cache: no    
   with_items: "{{ ubuntu_php_pkgs }}"
 
-- name: Copy the templates to their respective destination
+- name: Copy PHP config files
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -26,7 +26,7 @@
   notify:
     - Restart PHP5-FPM  
     
-- name: Copy the templates to their respestive destination
+- name: Copy Nginx config file
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -37,7 +37,7 @@
   notify:
     - Restart Nginx
 
-- name: Perform action of the desired files
+- name: Disable Nginx default virtual host
   file:
     src: "{{ item.src | default(omit) }}"
     dest: "{{ item.dest }}"

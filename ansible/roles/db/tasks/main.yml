@@ -1,9 +1,9 @@
 ---
-- name: MySQL is installed
+- name: MySQL Server is installed
   apt: pkg=mysql-server state=installed update_cache=false
 #  apt: pkg=mysql-server state=installed update_cache=true  
   
-- name: Python MySQL is installed
+- name: Python-MySQL is installed
   apt: pkg=python-mysqldb state=installed
 
 - name: Update MySQL root password for all root accounts 
@@ -29,7 +29,7 @@
   notify:
     - Restart MySQL     
     
-- name: Copy the templates to their respestive destination
+- name: Copy MySQL config file and local client's config file
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"

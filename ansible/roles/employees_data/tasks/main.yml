@@ -2,15 +2,15 @@
 - name: Git is present
   apt: pkg=git state=installed
     
-- name: Clone DB repo
+- name: Clone DB repository
   git: repo={{ db_repo_url }} dest=/tmp/data force=yes
 
-- name: Load employees database
+- name: Load Employees database to MySQL
   shell: mysql < employees.sql
   args:
     chdir: /tmp/data
     
-- name: Create MySQL user for app
+- name: Create MySQL user for the application
   mysql_user: name={{ database_user }} password={{ database_pass }} priv=employees.*:ALL state=present host={{ allowed_ip }}
     
   

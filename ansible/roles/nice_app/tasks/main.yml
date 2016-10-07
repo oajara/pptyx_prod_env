@@ -1,6 +1,6 @@
 ---
 
-- name: Setup Virtual Host
+- name: Setup Nginx Virtual Host
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -9,7 +9,7 @@
   with_items:
     - { src: 'virtualhost.conf.j2', dest: '/etc/nginx/sites-available/{{ server_name }}' }
 
-- name: Enable Virtual Host
+- name: Enable Nginx Virtual Host
   file:
     src: "{{ item.src | default(omit) }}"
     dest: "{{ item.dest }}"
@@ -20,16 +20,16 @@
     - Restart Nginx   
     
     
-- name: Create deploy directory
+- name: Create deployment directory
   file: dest={{ deploy_path }} state=directory owner=www-data group=www-data mode=0700
 
-- name: Deploy code
+- name: Deploy code from application repository
   git: repo={{ repo_url }} dest={{ deploy_path }} force=yes
 
 - name: Set www-data as owner of the deploy path directory
   file: dest={{ deploy_path }} state=directory owner=www-data group=www-data recurse=yes
   
-- name: Copy DB Config
+- name: Copy over applicaction config file
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
