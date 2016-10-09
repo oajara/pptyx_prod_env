@@ -1,7 +1,6 @@
 ---
 - name: Nginx is installed
-  apt: pkg=nginx state=installed update_cache=false
-#  apt: pkg=mysql-server state=installed update_cache=true  
+  apt: pkg=mysql-server state=installed update_cache=true  
 
 - name: Git is installed
   apt: pkg=git state=installed
@@ -10,8 +9,7 @@
   apt:
     name: "{{ item }}"
     state: latest
-#    update_cache: yes
-    update_cache: no    
+    update_cache: yes
   with_items: "{{ ubuntu_php_pkgs }}"
 
 - name: Copy PHP config files
