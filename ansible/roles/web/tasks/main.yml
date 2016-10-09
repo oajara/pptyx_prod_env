@@ -1,6 +1,6 @@
 ---
 - name: Nginx is installed
-  apt: pkg=mysql-server state=installed update_cache=true  
+  apt: pkg=nginx state=installed update_cache=true  
 
 - name: Git is installed
   apt: pkg=git state=installed
