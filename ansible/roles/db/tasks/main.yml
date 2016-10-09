@@ -1,7 +1,6 @@
 ---
 - name: MySQL Server is installed
-  apt: pkg=mysql-server state=installed update_cache=false
-#  apt: pkg=mysql-server state=installed update_cache=true  
+  apt: pkg=mysql-server state=installed update_cache=true  
   
 - name: Python-MySQL is installed
   apt: pkg=python-mysqldb state=installed
